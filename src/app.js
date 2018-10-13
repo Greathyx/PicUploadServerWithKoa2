@@ -46,6 +46,12 @@ const bodyParserConfig = {
 app.use(bodyParser(bodyParserConfig));
 
 
+// authentication, load passport config
+const passport = require('./middleware/Authentication');
+app.use(passport.initialize());
+app.use(passport.session());
+
+
 // use router
 const router = require('./router');
 router.all('404', '*', ctx => {

@@ -1,4 +1,5 @@
 const router = require('koa-router')();
+const passport = require('koa-passport');
 const UserService = require('./service/UserService');
 
 
@@ -33,3 +34,42 @@ router.post('/register', async ctx => {
 });
 
 module.exports = router;
+
+
+/**
+ *
+ * login route
+ *
+ */
+router.post('/login', ctx => {
+
+    // if use form-data, the data passed by bodyParser is in ctx.request.body.fields
+    // ctx.request.body.username = ctx.request.body.fields.username;
+    // ctx.request.body.password = ctx.request.body.fields.password;
+
+    // will automatically use the authentication method
+    return passport.authenticate('local', function (err, user, info, status) {
+        if (err) {
+            ctx.response.body = {message: 'error'}
+        }
+        else if (user === false) {
+            ctx.response.body = info;
+            //ctx.throw(401)
+        } else {
+            ctx.response.body = info;
+            return ctx.login(user)
+        }
+    })(ctx)
+});
+
+
+/**
+ *
+ * logout route
+ *
+ */
+router.get('/logout', ctx => {
+    ctx.logout();
+    ctx.body = {auth: ctx.isAuthenticated(), user: ctx.state.user};
+    ctx.response.body = {auth: ctx.isAuthenticated()};
+});

@@ -1,0 +1,27 @@
+{
+  "name": "picuploadwithkoa2",
+  "version": "1.0.0",
+  "description": "Web homework in 2018 with the requirement of uploading, processing and downloading a picture.",
+  "main": "app.js",
+  "dependencies": {
+    "koa": "^2.5.3",
+    "koa-router": "^7.4.0",
+    "mysql2": "^1.6.1",
+    "sequelize": "^4.39.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node ./src/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Greathyx/PicUploadWithKoa2.git"
+  },
+  "author": "Yuxuan Huang",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Greathyx/PicUploadWithKoa2/issues"
+  },
+  "homepage": "https://github.com/Greathyx/PicUploadWithKoa2#readme"
+}

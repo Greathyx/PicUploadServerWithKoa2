@@ -5,9 +5,11 @@
   "main": "app.js",
   "dependencies": {
     "koa": "^2.5.3",
+    "koa-body": "^4.0.4",
     "koa-router": "^7.4.0",
-    "mysql2": "^1.6.1",
-    "sequelize": "^4.39.0"
+    "koa-session": "^5.9.0",
+    "sequelize": "^4.39.0",
+    "sqlite3": "^4.0.2"
   },
   "devDependencies": {},
   "scripts": {

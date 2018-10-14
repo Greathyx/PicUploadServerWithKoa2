@@ -93,7 +93,7 @@ const isAuthenticated = (ctx, next) => {
             auth: false,
             message: 'Please login first!'
         };
-        // ctx.throw(401);
+        ctx.throw(401);
     }
 };
 

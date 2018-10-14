@@ -73,3 +73,39 @@ router.get('/logout', ctx => {
     ctx.body = {auth: ctx.isAuthenticated(), user: ctx.state.user};
     ctx.response.body = {auth: ctx.isAuthenticated()};
 });
+
+
+/**
+ *
+ * To test if a user has logged in
+ *
+ * Usage: use isAuthenticated as a middleware
+ *
+ * @param ctx
+ * @param next: the next middleware
+ * @returns {*}
+ */
+const isAuthenticated = (ctx, next) => {
+    if (ctx.isAuthenticated())
+        return next();
+    else {
+        ctx.response.body = {
+            auth: false,
+            message: 'Please login first!'
+        };
+        // ctx.throw(401);
+    }
+};
+
+
+/**
+ *
+ * To test if authenticated
+ *
+ */
+router.get('/testAuth', isAuthenticated, ctx => {
+    ctx.response.body = {
+        auth: true,
+        message: 'You have logged in.'
+    };
+});

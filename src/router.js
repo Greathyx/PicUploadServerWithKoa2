@@ -1,5 +1,6 @@
 const router = require('koa-router')();
 const passport = require('koa-passport');
+const hostUrl = require('./utils/HostUrl');
 const UserService = require('./service/UserService');
 
 
@@ -108,4 +109,75 @@ router.get('/testAuth', isAuthenticated, ctx => {
         auth: true,
         message: 'You have logged in.'
     };
+});
+
+
+/**
+ *
+ * upload pictures route
+ *
+ * accept formData: {file[type=file]: value}
+ *
+ */
+router.post('/uploadPics', ctx => {
+    // new version of koa-body use ctx.request.files to get the files to upload
+    // old version of koa-body user ctx.request.body.files to get the files to upload
+    let fields = ctx.request.files;
+    let imgUrlList = [];
+    if (ctx.session.imgUrlList === undefined || ctx.session.imgUrlList === null) {
+        ctx.session.imgUrlList = imgUrlList;
+    }
+    else {
+        imgUrlList = ctx.session.imgUrlList;
+    }
+
+    if (fields.file1 !== undefined) {
+        let absoluteUrl = fields.file1.path;
+        let hostImgName = absoluteUrl.substring(absoluteUrl.lastIndexOf('/'), absoluteUrl.length);
+        let imgUrl = hostUrl.ip + hostImgName;
+        imgUrlList.push(imgUrl);
+    }
+
+    if (fields.file2 !== undefined) {
+        let absoluteUrl = fields.file2.path;
+        let hostImgName = absoluteUrl.substring(absoluteUrl.lastIndexOf('/'), absoluteUrl.length);
+        let imgUrl = hostUrl.ip + hostImgName;
+        imgUrlList.push(imgUrl);
+    }
+
+    if (fields.file3 !== undefined) {
+        let absoluteUrl = fields.file3.path;
+        let hostImgName = absoluteUrl.substring(absoluteUrl.lastIndexOf('/'), absoluteUrl.length);
+        let imgUrl = hostUrl.ip + hostImgName;
+        imgUrlList.push(imgUrl);
+    }
+
+    if (fields.file4 !== undefined) {
+        let absoluteUrl = fields.file4.path;
+        let hostImgName = absoluteUrl.substring(absoluteUrl.lastIndexOf('/'), absoluteUrl.length);
+        let imgUrl = hostUrl.ip + hostImgName;
+        imgUrlList.push(imgUrl);
+    }
+
+    if (fields.file5 !== undefined) {
+        let absoluteUrl = fields.file5.path;
+        let hostImgName = absoluteUrl.substring(absoluteUrl.lastIndexOf('/'), absoluteUrl.length);
+        let imgUrl = hostUrl.ip + hostImgName;
+        imgUrlList.push(imgUrl);
+    }
+
+    ctx.session.imgUrlList = imgUrlList;
+    ctx.body = {imgUrlList: imgUrlList, message: "success"};
+});
+
+
+/**
+ *
+ * delete pics in database every time when opening the web page
+ *
+ */
+router.get('/clearUploadSession', ctx => {
+    ctx.session.imgUrlList = [];
+    console.log(ctx.session.imgUrlList);
+    ctx.body = {imgUrlList: [], message: "success"};
 });

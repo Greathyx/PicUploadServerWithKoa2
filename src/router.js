@@ -173,11 +173,10 @@ router.post('/uploadPics', ctx => {
 
 /**
  *
- * delete pics in database every time when opening the web page
+ * clear the uploaded pics session
  *
  */
 router.get('/clearUploadSession', ctx => {
     ctx.session.imgUrlList = [];
-    console.log(ctx.session.imgUrlList);
     ctx.body = {imgUrlList: [], message: "success"};
 });

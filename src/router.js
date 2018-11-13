@@ -2,6 +2,7 @@ const router = require('koa-router')();
 const passport = require('koa-passport');
 const hostUrl = require('./utils/HostUrl');
 const UserService = require('./service/UserService');
+const PictureService = require('./service/PictureService');
 
 
 /**
@@ -29,9 +30,12 @@ router.post('/register', async ctx => {
         ctx.throw(500);
     }
 
-    let result = await UserService.addUser({username: fields.username, password: fields.password, email: fields.email});
+    ctx.response.body = await UserService.addUser({
+        username: fields.username,
+        password: fields.password,
+        email: fields.email
+    });
 
-    ctx.response.body = result;
 });
 
 module.exports = router;
@@ -167,7 +171,7 @@ router.post('/uploadPics', ctx => {
     }
 
     ctx.session.imgUrlList = imgUrlList;
-    ctx.body = {imgUrlList: imgUrlList, message: "success"};
+    ctx.response.body = {imgUrlList: imgUrlList, message: "success"};
 });
 
 
@@ -178,5 +182,67 @@ router.post('/uploadPics', ctx => {
  */
 router.get('/clearUploadSession', ctx => {
     ctx.session.imgUrlList = [];
-    ctx.body = {imgUrlList: [], message: "success"};
+    ctx.response.body = {imgUrlList: [], message: "success"};
+});
+
+
+/**
+ *
+ * initialize the pics
+ *
+ */
+router.get('/picInit', async ctx => {
+    ctx.response.body = {imgList: await PictureService.getAllPics()};
+});
+
+
+/**
+ *
+ * get pics by tag
+ *
+ */
+router.post('/getPicsByTag', async ctx => {
+    let fields = ctx.request.body;
+    ctx.response.body = await PictureService.getPicsByTag(fields.tag);
+});
+
+
+/**
+ *
+ * sort pics
+ *
+ */
+router.post('/sort', async ctx => {
+    let fields = ctx.request.body;
+    if (fields.sortWay === 'popular') {
+        ctx.response.body = await PictureService.sortByPopularityDesc();
+    }
+    else if (fields.sortWay === 'newest') {
+        ctx.response.body = await PictureService.sortByCreationDateDesc();
+    }
+    else {
+        ctx.response.body = {imgList: await PictureService.getAllPics()};
+    }
+});
+
+
+/**
+ *
+ * add certain pic's visited times
+ *
+ */
+router.post('/addPopularity', async ctx => {
+    let fields = ctx.request.body;
+    ctx.response.body = {picture: await PictureService.addPopularity(fields.url)};
+});
+
+
+/**
+ *
+ * add a new tag
+ *
+ */
+router.post('/addTag', async ctx => {
+    let fields = ctx.request.body;
+    ctx.response.body = {newTag: await PictureService.addTag(fields.url, fields.newTag)};
 });

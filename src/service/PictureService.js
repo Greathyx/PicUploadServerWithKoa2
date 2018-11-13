@@ -107,17 +107,49 @@ async function addTag(url, newTag) {
 }
 
 
-/**
- *
- * delete all instances in Picture table
- *
- * @returns {Promise.<void>}
- */
-async function deleteAll() {
+async function seeAllTags() {
 
-    PictureModel.truncate();
+    let tagList = [];
+    let allPics = await PictureModel.findAll();
+
+    for (pic of allPics) {
+        let tempTagList = pic.tags.split(',');
+        for (tempTag of tempTagList) {
+            if (tagList.toString().search(tempTag) === -1) {
+                tagList.push(tempTag);
+            }
+        }
+    }
+
+    let tagDic = {};
+    for (tag of tagList) {
+        tagDic[tag] = 0;
+    }
+
+    for (tag of tagList) {
+        for (pic of allPics) {
+            if (pic.tags.search(tag) !== -1) {
+                tagDic[tag] += pic.visitTimes;
+            }
+        }
+    }
+
+    return tagDic;
 
 }
+
+
+// /**
+//  *
+//  * delete all instances in Picture table
+//  *
+//  * @returns {Promise.<void>}
+//  */
+// async function deleteAll() {
+//
+//     PictureModel.truncate();
+//
+// }
 
 module.exports = {
     getAllPics,
@@ -126,4 +158,5 @@ module.exports = {
     sortByCreationDateDesc,
     addPopularity,
     addTag,
+    seeAllTags,
 };

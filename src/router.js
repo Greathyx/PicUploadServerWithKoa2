@@ -246,3 +246,13 @@ router.post('/addTag', async ctx => {
     let fields = ctx.request.body;
     ctx.response.body = {newTag: await PictureService.addTag(fields.url, fields.newTag)};
 });
+
+
+/**
+ *
+ * get all tags and their visited times
+ *
+ */
+router.get('/seeAllTags', async ctx => {
+    ctx.response.body = {tagDic: await PictureService.seeAllTags()};
+});

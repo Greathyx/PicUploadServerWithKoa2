@@ -4,6 +4,7 @@
   "description": "Web homework in 2018 with the requirement of uploading, processing and downloading a picture.",
   "main": "app.js",
   "dependencies": {
+    "crypto-js": "^3.1.9-1",
     "koa": "^2.5.3",
     "koa-body": "^4.0.4",
     "koa-passport": "^4.1.1",

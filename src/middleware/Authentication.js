@@ -1,6 +1,7 @@
 const passport = require('koa-passport');
 var LocalStrategy = require('passport-local').Strategy;
 const UserService = require('../service/UserService');
+var CryptoJS = require("crypto-js");
 
 // const fetchUser = (() => {
 //     // This is an example! Use password hashing in your
@@ -46,7 +47,14 @@ passport.use(new LocalStrategy({
         // passwordField: 'password'
     },
     function (username, password, done) {
-        UserService.verifyPassword({loginName: username, password: password})
+        // Decrypt
+        const username_bytes = CryptoJS.AES.decrypt(username, 'username_key');
+        const username_deciphered = username_bytes.toString(CryptoJS.enc.Utf8);
+
+        const password_bytes = CryptoJS.AES.decrypt(password, 'password_key');
+        const password_deciphered = password_bytes.toString(CryptoJS.enc.Utf8);
+
+        UserService.verifyPassword({loginName: username_deciphered, password: password_deciphered})
             .then(result => {
                 if (result.message === 'success') {
                     done(null, result.user, result)

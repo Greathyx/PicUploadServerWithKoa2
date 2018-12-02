@@ -3,6 +3,7 @@ const passport = require('koa-passport');
 const hostUrl = require('./utils/HostUrl');
 const UserService = require('./service/UserService');
 const PictureService = require('./service/PictureService');
+var CryptoJS = require("crypto-js");
 
 
 /**
@@ -30,10 +31,20 @@ router.post('/register', async ctx => {
         ctx.throw(500);
     }
 
+    // Decrypt
+    const username_bytes = CryptoJS.AES.decrypt(fields.username, 'username_key');
+    const username_deciphered = username_bytes.toString(CryptoJS.enc.Utf8);
+
+    const email_bytes = CryptoJS.AES.decrypt(fields.email, 'email_key');
+    const email_deciphered = email_bytes.toString(CryptoJS.enc.Utf8);
+
+    const password_bytes = CryptoJS.AES.decrypt(fields.password, 'password_key');
+    const password_deciphered = password_bytes.toString(CryptoJS.enc.Utf8);
+
     ctx.response.body = await UserService.addUser({
-        username: fields.username,
-        password: fields.password,
-        email: fields.email
+        username: username_deciphered,
+        password: password_deciphered,
+        email: email_deciphered
     });
 
 });

@@ -49,8 +49,6 @@ router.post('/register', async ctx => {
 
 });
 
-module.exports = router;
-
 
 /**
  *
@@ -267,3 +265,5 @@ router.post('/addTag', async ctx => {
 router.get('/seeAllTags', async ctx => {
     ctx.response.body = {tagDic: await PictureService.seeAllTags()};
 });
+
+module.exports = router;
